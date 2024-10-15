@@ -1,6 +1,7 @@
 package statix.org
 
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -9,6 +10,8 @@ import io.ktor.server.testing.*
 import io.ktor.utils.io.*
 import org.junit.jupiter.api.assertThrows
 import statix.org.middlewares.CancelTestMiddleware
+import statix.org.middlewares.DataPassingMiddleware
+import statix.org.middlewares.DataReceivingMiddleware
 import statix.org.middlewares.SingleTestMiddleware
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -89,5 +92,25 @@ class MiddlewareTest {
                 }
             }
             assertThrows<CancellationException> { client.get("/") }
+        }
+
+    @Test
+    fun testMiddlewareDataPassing() =
+        testApplication {
+            application {
+                install(Middlewares) {
+                    middleware =
+                        middlewareGroup {
+                            this += DataPassingMiddleware()
+                            this += DataReceivingMiddleware()
+                        }
+                }
+                routing {
+                    get("/") { }
+                }
+            }
+
+            val response = client.get("/")
+            assertEquals("Test", response.bodyAsText())
         }
 }

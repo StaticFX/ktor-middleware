@@ -1,7 +1,6 @@
 package statix.org
 
 import io.ktor.server.application.*
-import kotlinx.coroutines.CancellationException
 
 class MutableListMiddlewareGroup(
     middlewares: List<Middleware> = listOf(),
@@ -10,9 +9,15 @@ class MutableListMiddlewareGroup(
 
     override suspend fun handleCall(
         call: ApplicationCall,
-        cancel: (exception: CancellationException?) -> Unit,
-    ) {
-        middlewares.forEach { it.handleCall(call, cancel) }
+        receives: MiddlewareData?,
+    ): MiddlewareData {
+        var data = receives
+
+        for (middleware in middlewares) {
+            data = middleware.handleCall(call, data)
+        }
+
+        return data ?: MiddlewareData.empty()
     }
 
     override fun group(): List<Middleware> = middlewares.toList()

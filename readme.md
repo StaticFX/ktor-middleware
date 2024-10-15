@@ -2,6 +2,11 @@
 
 Adds Laravel inspired Middlewares to KTOR with simple syntax.
 
+## Add to your project
+```shell
+implementation("io.github.staticfx:ktor-middleware:1.0.0")
+```
+
 ### Simple Middleware
 
 ```kotlin
@@ -55,7 +60,7 @@ install(Middlewares) {
 ```
 
 ### Roadmap
-- [ ] Add data object to persist data between middlewares
+- [x] Add data object to persist data between middlewares
 - [ ] Improve experience of the cancel function
 - [ ] Add better builders for middlewares
 - [ ] Add sample middlewares

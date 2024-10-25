@@ -7,13 +7,12 @@ val ktor_version: String = "3.0.0"
 
 plugins {
     kotlin("jvm") version "2.0.21"
-    id("io.ktor.plugin") version "3.0.0"
     id("com.vanniktech.maven.publish") version "0.28.0"
     id("org.jetbrains.dokka") version "1.9.20"
 }
 
 group = "statix.org"
-version = "1.0.2"
+version = "1.0.8"
 val projectVersion: String = version.toString()
 
 repositories {
@@ -34,18 +33,29 @@ kotlin {
     jvmToolchain(21)
 }
 
+tasks.register<Jar>("sourcesJar") {
+    from(sourceSets.main.get().allSource)
+    archiveClassifier.set("sources")
+}
+
+tasks.register<Jar>("javadocJar") {
+    dependsOn(tasks.dokkaJavadoc)
+    from(tasks.dokkaJavadoc.get().outputDirectory)
+    archiveClassifier.set("javadoc")
+}
+
 mavenPublishing {
+    coordinates(
+        groupId = "io.github.staticfx",
+        artifactId = "ktor-middleware",
+        version = projectVersion,
+    )
+
     configure(
         KotlinJvm(
             javadocJar = JavadocJar.Dokka("dokkaHtml"),
             sourcesJar = true,
         ),
-    )
-
-    coordinates(
-        groupId = "io.github.staticfx",
-        artifactId = "ktor-middleware",
-        version = projectVersion,
     )
 
     pom {
@@ -72,17 +82,11 @@ mavenPublishing {
             url.set("https://github.com/StaticFX/ktor-middleware")
         }
     }
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
 
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
 }
 
 tasks.test {
     useJUnitPlatform()
-}
-
-tasks {
-    shadowJar {
-        enabled = false
-    }
 }

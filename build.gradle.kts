@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "statix.org"
-version = "1.0.0"
+version = "1.0.2"
 val projectVersion: String = version.toString()
 
 repositories {
@@ -32,9 +32,6 @@ subprojects {
 
 kotlin {
     jvmToolchain(21)
-}
-
-publishing {
 }
 
 mavenPublishing {
@@ -75,8 +72,8 @@ mavenPublishing {
             url.set("https://github.com/StaticFX/ktor-middleware")
         }
     }
-
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+
     signAllPublications()
 }
 

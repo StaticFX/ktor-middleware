@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "statix.org"
-version = "1.0.8"
+version = "1.0.9"
 val projectVersion: String = version.toString()
 
 repositories {

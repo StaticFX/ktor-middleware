@@ -30,6 +30,37 @@ kotlin {
     jvmToolchain(21)
 }
 
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+            groupId = "io.github.staticfx"
+            artifactId = "ktor-middleware"
+            version = rootProject.version.toString()
+
+            pom {
+                name.set("KTOR Middleware")
+                description.set("Middlewares for kotlin")
+                url.set("https://github.com/StaticFX/ktor-middleware")
+
+                licenses {
+                    license {
+                        name.set("GNU GENERAL PUBLIC LICENSE")
+                        url.set("https://www.gnu.org/licenses/gpl-3.0.de.html")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("staticfx")
+                        name.set("StaticFX")
+                        email.set("devin-fritz@gmx.de")
+                    }
+                }
+            }
+        }
+    }
+}
+
 java {
     withSourcesJar()
     withJavadocJar()

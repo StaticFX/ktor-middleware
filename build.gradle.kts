@@ -2,13 +2,14 @@ val kotlin_version: String = "2.0.21"
 val ktor_version: String = "3.0.0"
 
 plugins {
-    kotlin("jvm") version "2.0.21"
     `maven-publish`
+    kotlin("jvm") version "2.0.21"
+    id("com.gradleup.shadow") version "8.3.0"
     id("org.jetbrains.dokka") version "1.9.20"
 }
 
 group = "statix.org"
-version = "1.0.9"
+version = "1.1.0"
 val projectVersion: String = version.toString()
 
 repositories {
@@ -29,15 +30,19 @@ kotlin {
     jvmToolchain(21)
 }
 
-tasks.register<Jar>("sourcesJar") {
-    from(sourceSets.main.get().allSource)
-    archiveClassifier.set("sources")
+java {
+    withSourcesJar()
+    withJavadocJar()
 }
 
-tasks.register<Jar>("javadocJar") {
-    dependsOn(tasks.dokkaJavadoc)
-    from(tasks.dokkaJavadoc.get().outputDirectory)
-    archiveClassifier.set("javadoc")
+tasks {
+    shadowJar {
+        minimize()
+    }
+
+    build {
+        dependsOn(shadowJar)
+    }
 }
 
 tasks.test {

@@ -4,7 +4,7 @@ Adds Laravel inspired Middlewares to KTOR with simple syntax.
 
 ## Add to your project
 ```shell
-implementation("io.github.staticfx:ktor-middleware:1.0.1")
+implementation("io.github.staticfx:ktor-middleware:v1.1.1")
 ```
 
 ### Simple Middleware
